@@ -6,6 +6,7 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default defineConfig([
   globalIgnores(["dist"]),
@@ -18,6 +19,7 @@ export default defineConfig([
       reactX.configs["recommended-typescript"],
       reactDom.configs.recommended,
       reactRefresh.configs.vite,
+      ...pluginQuery.configs["flat/recommended"],
     ],
     languageOptions: {
       parserOptions: {
