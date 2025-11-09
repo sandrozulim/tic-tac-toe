@@ -62,7 +62,7 @@ export default function RegisterPage() {
           className="inline-block text-gray-600 mt-4 text-sm text-center w-full underline"
           to="/login"
         >
-          Don&apos;t have an account?
+          Already have an account?
           <span className="font-medium"> Login here</span>
         </Link>
 
