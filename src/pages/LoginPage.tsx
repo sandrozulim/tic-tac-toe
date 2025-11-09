@@ -8,6 +8,8 @@ import { type AxiosError } from "axios";
 import type { ApiError } from "../api/api-types";
 import type { components } from "../api/api.generated";
 import { Link, useNavigate } from "react-router";
+import { TextInput } from "../components/TextInput";
+import { Button } from "../components/Button";
 
 type LoginInput = components["schemas"]["LoginInput"];
 type LoginResponse = components["schemas"]["LoginOutput"];
@@ -52,41 +54,28 @@ export default function LoginPage() {
           <span className="font-medium"> Register here</span>
         </Link>
         <form className="mt-10 flex flex-col gap-4" onSubmit={handleSubmit}>
+          <TextInput
+            label="Username"
+            id="username"
+            name="username"
+            value={form.username}
+            onChange={handleChange}
+            autoFocus
+            required
+          />
+          <TextInput
+            type="password"
+            label="Password"
+            id="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            minLength={4}
+          />
           <div>
-            <label className="text-gray-500 text-sm" htmlFor="username">
-              Username
-            </label>
-            <input
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 "
-              type="text"
-              id="username"
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              autoFocus
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-gray-500 text-sm" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 "
-              type="password"
-              id="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              minLength={4}
-            />
-          </div>
-
-          <div>
-            <button
-              className="bg-black text-white w-full py-2 rounded-lg hover:cursor-pointer hover:bg-neutral-800 active:bg-neutral-800 transition-colors disabled:bg-neutral-400"
+            <Button
+              className="mt-4"
               type="submit"
               disabled={
                 mutation.isPending ||
@@ -94,8 +83,8 @@ export default function LoginPage() {
                 !form.password.trim()
               }
             >
-              {mutation.isPending ? "..." : "Login"}
-            </button>
+              Login
+            </Button>
 
             {mutation.isError && (
               <ErrorMessage

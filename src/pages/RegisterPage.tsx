@@ -6,6 +6,8 @@ import type { components } from "../api/api.generated";
 import { type AxiosError } from "axios";
 import { ErrorMessage } from "../components/ErrorMessage";
 import type { ApiError } from "../api/api-types";
+import { TextInput } from "../components/TextInput";
+import { Button } from "../components/Button";
 
 type RegisterInput = components["schemas"]["RegisterInput"];
 type RegisterResponse = components["schemas"]["User"];
@@ -67,57 +69,37 @@ export default function RegisterPage() {
         </Link>
 
         <form className="mt-10 flex flex-col gap-4" onSubmit={handleSubmit}>
+          <TextInput
+            label="Username"
+            id="username"
+            name="username"
+            value={form.username}
+            onChange={handleChange}
+            autoFocus
+            required
+          />
+          <TextInput
+            type="password"
+            label="Password"
+            id="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            minLength={4}
+            required
+          />
+          <TextInput
+            type="password"
+            label="Repeat Password"
+            id="repeat-password"
+            name="repeat-password"
+            value={repeatPassword}
+            onChange={(e) => setRepeatPassword(e.target.value)}
+            minLength={4}
+            required
+          />
           <div>
-            <label className="text-gray-500 text-sm" htmlFor="username">
-              Username
-            </label>
-            <input
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 "
-              type="text"
-              id="username"
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              autoFocus
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-gray-500 text-sm" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 "
-              type="password"
-              id="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              minLength={4}
-            />
-          </div>
-
-          <div>
-            <label className="text-gray-500 text-sm" htmlFor="repeat-password">
-              Repeat Password
-            </label>
-            <input
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 "
-              type="password"
-              id="repeat-password"
-              name="repeat-password"
-              value={repeatPassword}
-              onChange={(e) => setRepeatPassword(e.target.value)}
-              required
-              minLength={4}
-            />
-          </div>
-
-          <div>
-            <button
-              className="bg-black text-white w-full py-2 rounded-lg hover:cursor-pointer hover:bg-neutral-800 active:bg-neutral-800 transition-colors disabled:bg-neutral-400 disabled:cursor-default"
+            <Button
               type="submit"
               disabled={
                 mutation.isPending ||
@@ -127,8 +109,7 @@ export default function RegisterPage() {
               }
             >
               Register
-            </button>
-
+            </Button>
             {(mutation.isError || passwordError) && (
               <ErrorMessage
                 message={
