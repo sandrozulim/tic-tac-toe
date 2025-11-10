@@ -3,6 +3,8 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { usePaginatedGames } from "../hooks/usePaginatedGames";
 import { PaginationControls } from "../components/PaginationControls";
 import GameCard from "../components/GameCard";
+import useCreateGame from "../hooks/useCreateGame";
+import { Button } from "../components/Button";
 
 export default function GamesPage() {
   const [page, setPage] = useState(1);
@@ -10,6 +12,10 @@ export default function GamesPage() {
     ["games"],
     page
   );
+
+  /* TODO - cleanup */
+
+  const createGameMutation = useCreateGame();
 
   if (isError) {
     return (
@@ -19,11 +25,17 @@ export default function GamesPage() {
     );
   }
 
-  if (data?.results?.length === 0) {
+  if (!isFetching && data?.results?.length === 0) {
     return (
       <div className="max-w-2xl mx-auto p-4">
         <h2 className="text-3xl font-semibold text-center mb-6">Games</h2>
         <ErrorMessage message="No games found" />
+        <Button
+          onClick={() => createGameMutation.mutate()}
+          disabled={createGameMutation.isPending}
+        >
+          {createGameMutation.isPending ? "Creating..." : "New Game"}
+        </Button>
       </div>
     );
   }
@@ -33,8 +45,23 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h2 className="text-3xl font-semibold text-center mb-6">Games</h2>
+    <div className="max-w-2xl mx-auto p-4 flex flex-col gap-6">
+      <h2 className="text-3xl font-semibold text-center">Games</h2>
+      <Button
+        onClick={() => createGameMutation.mutate()}
+        disabled={createGameMutation.isPending}
+      >
+        {createGameMutation.isPending ? "Creating..." : "New Game"}
+      </Button>
+
+      {createGameMutation.isError && (
+        <ErrorMessage
+          message={
+            createGameMutation.error.response?.data.errors[0].message ||
+            createGameMutation.error.message
+          }
+        />
+      )}
 
       {!isFetching && data?.results && (
         <div>
