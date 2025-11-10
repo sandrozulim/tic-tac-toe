@@ -4,23 +4,25 @@ import RegisterPage from "./pages/RegisterPage";
 import GamesPage from "./pages/GamesPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
+import { AppLayout } from "./components/layouts/AppLayout";
 
 export default function App() {
   return (
-    <main className="relative min-h-screen px-4 py-8 bg-white text-black">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <GamesPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </main>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      {/* protected routes with AppLayout */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<GamesPage />} />
+      </Route>
+      {/* catch all route */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
