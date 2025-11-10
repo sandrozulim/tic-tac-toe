@@ -3,20 +3,27 @@ import { useAuth } from "../context/AuthContext";
 import { Button } from "./Button";
 
 export function Header() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, username } = useAuth();
 
   return (
-    <header className="p-4 flex justify-between items-center bg-white/50 text-black sticky top-0 z-50 backdrop-blur-sm shadow-md">
-      <Link to="/" className="font-bold text-xl">
-        <h1>TicTacToe</h1>
-      </Link>
+    <header className="p-4 bg-white/50 text-black sticky top-0 z-50 backdrop-blur-sm shadow-md">
+      <div className="max-w-[1200px] mx-auto flex justify-between items-center">
+        <Link to="/" className="font-bold text-xl">
+          <h1>TicTacToe</h1>
+        </Link>
 
-      {/* TODO - logout functionality */}
-      {isAuthenticated && (
-        <Button className="w-fit py-1" onClick={logout}>
-          Logout
-        </Button>
-      )}
+        {/* TODO - logout functionality */}
+        <div className="flex justify-center items-center gap-2">
+          {username && isAuthenticated && (
+            <span className="text-green-700">{username}</span>
+          )}
+          {isAuthenticated && (
+            <Button className="w-fit py-1" onClick={logout}>
+              Logout
+            </Button>
+          )}
+        </div>
+      </div>
     </header>
   );
 }

@@ -5,13 +5,13 @@ import GamesPage from "./pages/GamesPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import { AppLayout } from "./components/layouts/AppLayout";
+import GamePage from "./pages/GamePage";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      {/* protected routes with AppLayout */}
       <Route
         element={
           <ProtectedRoute>
@@ -20,6 +20,7 @@ export default function App() {
         }
       >
         <Route index element={<GamesPage />} />
+        <Route path="/games/:id" element={<GamePage />} />
       </Route>
       {/* catch all route */}
       <Route path="*" element={<NotFoundPage />} />

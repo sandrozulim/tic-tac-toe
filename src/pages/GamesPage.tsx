@@ -6,14 +6,13 @@ import GameCard from "../components/GameCard";
 import useCreateGame from "../hooks/useCreateGame";
 import { Button } from "../components/Button";
 
+/* TODO - sync pagination with params */
 export default function GamesPage() {
   const [page, setPage] = useState(1);
   const { data, isError, error, isFetching, totalPages } = usePaginatedGames(
     ["games"],
     page
   );
-
-  /* TODO - cleanup */
 
   const createGameMutation = useCreateGame();
 
@@ -24,7 +23,6 @@ export default function GamesPage() {
       />
     );
   }
-
   if (!isFetching && data?.results?.length === 0) {
     return (
       <div className="max-w-2xl mx-auto p-4">
@@ -65,7 +63,7 @@ export default function GamesPage() {
 
       {!isFetching && data?.results && (
         <div>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 auto-rows-fr">
             {data.results.map((game) => (
               <li
                 className="p-4 border border-gray-200 rounded-lg shadow-lg"

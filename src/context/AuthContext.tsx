@@ -4,7 +4,8 @@ import { api } from "../api/axios";
 
 type AuthContextType = {
   token: string | null;
-  login: (token: string) => void;
+  username: string | null;
+  login: (token: string, username: string) => void;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
 };
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     if (token) {
@@ -22,8 +24,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [token]);
 
-  const login = (newToken: string) => {
+  const login = (newToken: string, username: string) => {
     setToken(newToken);
+    setUsername(username);
   };
 
   const logout = async () => {
@@ -40,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value: AuthContextType = {
     token,
+    username,
     login,
     logout,
     isAuthenticated: !!token,
