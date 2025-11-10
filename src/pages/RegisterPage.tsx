@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import { api } from "../api/axios";
-import type { components } from "../api/api.generated";
+import type { components } from "../types/api.generated";
 import { type AxiosError } from "axios";
 import { ErrorMessage } from "../components/ErrorMessage";
-import type { ApiError } from "../api/api-types";
+import type { ApiError } from "../types/types";
 import { TextInput } from "../components/TextInput";
 import { Button } from "../components/Button";
 

@@ -5,8 +5,8 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/AuthContext";
 
 import { type AxiosError } from "axios";
-import type { ApiError } from "../api/api-types";
-import type { components } from "../api/api.generated";
+import type { ApiError } from "../types/types";
+import type { components } from "../types/api.generated";
 import { Link, useNavigate } from "react-router";
 import { TextInput } from "../components/TextInput";
 import { Button } from "../components/Button";
