@@ -21,6 +21,7 @@ export function PaginationControls({
         className="w-fit rounded-full p-1"
         onClick={() => setPage(Math.max(page - 1, 1))}
         disabled={page === 1 || isFetching}
+        aria-label="Previous page"
       >
         <ArrowLeftIcon />
       </Button>
@@ -31,6 +32,7 @@ export function PaginationControls({
         className="w-fit rounded-full p-1"
         onClick={() => setPage(Math.min(page + 1, totalPages))}
         disabled={page === totalPages || isFetching}
+        aria-label="Next page"
       >
         <ArrowRightIcon />
       </Button>
