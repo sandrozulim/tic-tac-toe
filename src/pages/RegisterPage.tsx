@@ -1,19 +1,14 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router";
-import { api } from "../api/axios";
+import { Link } from "react-router";
 import type { components } from "../types/api.generated";
-import { type AxiosError } from "axios";
 import { ErrorMessage } from "../components/ErrorMessage";
-import type { ApiError } from "../types/types";
 import { TextInput } from "../components/TextInput";
 import { Button } from "../components/Button";
+import useRegister from "../hooks/useRegister";
 
 type RegisterInput = components["schemas"]["RegisterInput"];
-type RegisterResponse = components["schemas"]["User"];
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
   const [form, setForm] = useState<RegisterInput>({
     username: "",
     password: "",
@@ -21,19 +16,7 @@ export default function RegisterPage() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
-  const mutation = useMutation<
-    RegisterResponse,
-    AxiosError<ApiError>,
-    RegisterInput
-  >({
-    mutationFn: async (data) => {
-      const res = await api.post("/register/", data);
-      return res.data;
-    },
-    onSuccess: () => {
-      navigate("/login");
-    },
-  });
+  const { mutate, isPending, isError, error } = useRegister();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,7 +34,7 @@ export default function RegisterPage() {
     }
 
     setPasswordError(null);
-    mutation.mutate(form);
+    mutate(form);
   };
 
   return (
@@ -102,7 +85,7 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={
-                mutation.isPending ||
+                isPending ||
                 !form.username.trim() ||
                 !form.password.trim() ||
                 !repeatPassword.trim()
@@ -110,12 +93,12 @@ export default function RegisterPage() {
             >
               Register
             </Button>
-            {(mutation.isError || passwordError) && (
+            {(isError || passwordError) && (
               <ErrorMessage
                 message={
                   passwordError ||
-                  mutation.error?.response?.data.errors?.[0]?.message ||
-                  mutation.error?.message ||
+                  error?.response?.data.errors?.[0]?.message ||
+                  error?.message ||
                   "Something went wrong"
                 }
               />

@@ -1,36 +1,16 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { api } from "../api/axios";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { useAuth } from "../context/AuthContext";
-
-import { type AxiosError } from "axios";
-import type { ApiError } from "../types/types";
 import type { components } from "../types/api.generated";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { TextInput } from "../components/TextInput";
 import { Button } from "../components/Button";
+import useLogin from "../hooks/useLogin";
 
 type LoginInput = components["schemas"]["LoginInput"];
-type LoginResponse = components["schemas"]["LoginOutput"];
 
 export default function LoginPage() {
-  const { login } = useAuth();
-  const navigate = useNavigate();
   const [form, setForm] = useState<LoginInput>({ username: "", password: "" });
-
-  const mutation = useMutation<LoginResponse, AxiosError<ApiError>, LoginInput>(
-    {
-      mutationFn: async (data) => {
-        const res = await api.post("/login/", data);
-        return res.data;
-      },
-      onSuccess: (data) => {
-        login(data.token, data.username);
-        navigate("/");
-      },
-    }
-  );
+  const { mutate, isPending, isError, error } = useLogin();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,7 +19,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate(form);
+    mutate(form);
   };
 
   return (
@@ -78,19 +58,16 @@ export default function LoginPage() {
               className="mt-4"
               type="submit"
               disabled={
-                mutation.isPending ||
-                !form.username.trim() ||
-                !form.password.trim()
+                isPending || !form.username.trim() || !form.password.trim()
               }
             >
               Login
             </Button>
 
-            {mutation.isError && (
+            {isError && (
               <ErrorMessage
                 message={
-                  mutation.error?.response?.data.errors?.[0]?.message ||
-                  mutation.error?.message
+                  error?.response?.data.errors?.[0]?.message || error?.message
                 }
               />
             )}
